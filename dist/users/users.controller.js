@@ -20,6 +20,8 @@ const roles_guard_1 = require("../auth/roles.guard");
 const assign_roles_dto_1 = require("./dto/assign-roles.dto");
 const user_schema_1 = require("./schemas/user.schema");
 const users_service_1 = require("./users.service");
+const swagger_1 = require("@nestjs/swagger");
+const create_user_dto_1 = require("./dto/create-user.dto");
 let UsersController = class UsersController {
     usersService;
     constructor(usersService) {
@@ -37,6 +39,13 @@ __decorate([
     (0, common_1.UseGuards)(jwt_auth_guards_1.JwtAuthGuard, roles_guard_1.RolesGuard),
     (0, roles_decorator_1.Roles)(user_schema_1.UserRole.Admin),
     (0, common_1.Get)(),
+    (0, swagger_1.ApiOperation)({ summary: 'Fetch all users' }),
+    (0, swagger_1.ApiResponse)({
+        status: 200,
+        description: 'All users fetched successfully',
+        type: create_user_dto_1.CreateUserDto,
+        isArray: true,
+    }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
@@ -45,6 +54,12 @@ __decorate([
     (0, common_1.UseGuards)(jwt_auth_guards_1.JwtAuthGuard, roles_guard_1.RolesGuard),
     (0, roles_decorator_1.Roles)(user_schema_1.UserRole.Admin),
     (0, common_1.Patch)(':id/roles'),
+    (0, swagger_1.ApiOperation)({ summary: 'Update user role' }),
+    (0, swagger_1.ApiOkResponse)({
+        description: 'User role updated',
+        type: assign_roles_dto_1.AssignRolesDto,
+        isArray: true,
+    }),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -52,6 +67,8 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], UsersController.prototype, "assignRoles", null);
 exports.UsersController = UsersController = __decorate([
+    (0, swagger_1.ApiBearerAuth)(),
+    (0, swagger_1.ApiTags)('users'),
     (0, common_1.Controller)('users'),
     __metadata("design:paramtypes", [users_service_1.UsersService])
 ], UsersController);

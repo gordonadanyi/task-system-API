@@ -17,6 +17,7 @@ const common_1 = require("@nestjs/common");
 const create_user_dto_1 = require("../users/dto/create-user.dto");
 const login_dto_1 = require("../users/dto/login.dto");
 const auth_service_1 = require("./auth.service");
+const swagger_1 = require("@nestjs/swagger");
 let AuthController = class AuthController {
     authService;
     constructor(authService) {
@@ -33,6 +34,15 @@ exports.AuthController = AuthController;
 __decorate([
     (0, common_1.HttpCode)(common_1.HttpStatus.OK),
     (0, common_1.Post)('register'),
+    (0, swagger_1.ApiOperation)({ summary: 'Register User' }),
+    (0, swagger_1.ApiCreatedResponse)({
+        description: 'User registered successfully',
+        type: create_user_dto_1.CreateUserDto,
+        isArray: true
+    }),
+    (0, swagger_1.ApiBadRequestResponse)({
+        description: 'Invalid input',
+    }),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [create_user_dto_1.CreateUserDto]),
@@ -41,12 +51,21 @@ __decorate([
 __decorate([
     (0, common_1.HttpCode)(common_1.HttpStatus.OK),
     (0, common_1.Post)('login'),
+    (0, swagger_1.ApiOperation)({ summary: 'Login User' }),
+    (0, swagger_1.ApiOkResponse)({ description: 'User login sucessful',
+        type: login_dto_1.LoginDto,
+        isArray: true
+    }),
+    (0, swagger_1.ApiBadRequestResponse)({
+        description: 'Invalid input',
+    }),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [login_dto_1.LoginDto]),
     __metadata("design:returntype", void 0)
 ], AuthController.prototype, "login", null);
 exports.AuthController = AuthController = __decorate([
+    (0, swagger_1.ApiTags)('auth'),
     (0, common_1.Controller)('auth'),
     __metadata("design:paramtypes", [auth_service_1.AuthService])
 ], AuthController);

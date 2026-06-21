@@ -12,11 +12,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AssignRolesDto = void 0;
 const class_validator_1 = require("class-validator");
 const user_schema_1 = require("../schemas/user.schema");
+const swagger_1 = require("@nestjs/swagger");
 class AssignRolesDto {
     roles;
 }
 exports.AssignRolesDto = AssignRolesDto;
 __decorate([
+    (0, swagger_1.ApiProperty)({
+        description: 'assign role to user',
+        example: 'admin or user',
+    }),
     (0, class_validator_1.IsArray)(),
     (0, class_validator_1.ArrayNotEmpty)({ message: 'At least one role is required' }),
     (0, class_validator_1.IsEnum)(user_schema_1.UserRole, { each: true }),

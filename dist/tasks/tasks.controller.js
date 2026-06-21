@@ -22,6 +22,7 @@ const assign_task_dto_1 = require("./dto/assign-task.dto");
 const create_task_dto_1 = require("./dto/create-task.dto");
 const tasks_service_1 = require("./tasks.service");
 const update_task_status_dto_1 = require("./dto/update-task-status.dto");
+const swagger_1 = require("@nestjs/swagger");
 let TasksController = class TasksController {
     tasksService;
     constructor(tasksService) {
@@ -72,6 +73,15 @@ let TasksController = class TasksController {
 exports.TasksController = TasksController;
 __decorate([
     (0, common_1.Post)(),
+    (0, swagger_1.ApiOperation)({ summary: 'Create task' }),
+    (0, swagger_1.ApiResponse)({
+        status: 201,
+        description: 'Task Created',
+        type: create_task_dto_1.CreateTaskDto,
+    }),
+    (0, swagger_1.ApiBadRequestResponse)({
+        description: 'Invalid input',
+    }),
     __param(0, (0, common_1.Body)()),
     __param(1, (0, common_1.Req)()),
     __metadata("design:type", Function),
@@ -80,6 +90,11 @@ __decorate([
 ], TasksController.prototype, "create", null);
 __decorate([
     (0, common_1.Get)(),
+    (0, swagger_1.ApiOperation)({ summary: 'Fetch all task' }),
+    (0, swagger_1.ApiResponse)({
+        status: 200,
+        description: 'All tasks fetched successfully',
+    }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
@@ -87,6 +102,9 @@ __decorate([
 __decorate([
     (0, roles_decorator_1.Roles)(user_schema_1.UserRole.Admin),
     (0, common_1.Get)(':id'),
+    (0, swagger_1.ApiOperation)({ summary: 'Fetch a task by id' }),
+    (0, swagger_1.ApiOkResponse)({ description: 'Task found' }),
+    (0, swagger_1.ApiNotFoundResponse)({ description: 'Task not found' }),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
@@ -95,6 +113,12 @@ __decorate([
 __decorate([
     (0, roles_decorator_1.Roles)(user_schema_1.UserRole.Admin),
     (0, common_1.Put)(':id'),
+    (0, swagger_1.ApiOperation)({ summary: 'Update a task by id' }),
+    (0, swagger_1.ApiOkResponse)({ description: 'Task updated',
+        type: create_task_dto_1.CreateTaskDto,
+        isArray: true
+    }),
+    (0, swagger_1.ApiNotFoundResponse)({ description: 'Task not found' }),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -103,6 +127,12 @@ __decorate([
 ], TasksController.prototype, "update", null);
 __decorate([
     (0, common_1.Patch)(':id/status'),
+    (0, swagger_1.ApiOperation)({ summary: 'Update status of a task' }),
+    (0, swagger_1.ApiOkResponse)({ description: 'Task status updated ',
+        type: update_task_status_dto_1.UpdateTaskStatusDto,
+        isArray: true,
+    }),
+    (0, swagger_1.ApiNotFoundResponse)({ description: 'Task not found' }),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),
     __param(2, (0, common_1.Req)()),
@@ -113,6 +143,9 @@ __decorate([
 __decorate([
     (0, roles_decorator_1.Roles)(user_schema_1.UserRole.Admin),
     (0, common_1.Delete)(':id'),
+    (0, swagger_1.ApiOperation)({ summary: 'Delete a task' }),
+    (0, swagger_1.ApiOkResponse)({ description: 'Task deleted ' }),
+    (0, swagger_1.ApiNotFoundResponse)({ description: 'Task not found' }),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
@@ -122,6 +155,11 @@ __decorate([
     (0, common_1.UseGuards)(jwt_auth_guards_1.JwtAuthGuard, roles_guard_1.RolesGuard),
     (0, roles_decorator_1.Roles)(user_schema_1.UserRole.Admin),
     (0, common_1.Patch)(':id/assign'),
+    (0, swagger_1.ApiOperation)({ summary: 'Assign task to user ' }),
+    (0, swagger_1.ApiOkResponse)({ description: 'Task assigned to user ',
+        type: assign_task_dto_1.AssignTaskDto,
+        isArray: true,
+    }),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -129,6 +167,8 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], TasksController.prototype, "assign", null);
 exports.TasksController = TasksController = __decorate([
+    (0, swagger_1.ApiBearerAuth)(),
+    (0, swagger_1.ApiTags)('task'),
     (0, common_1.Controller)('tasks'),
     (0, common_1.UseGuards)(jwt_auth_guards_1.JwtAuthGuard, roles_guard_1.RolesGuard),
     __metadata("design:paramtypes", [tasks_service_1.TasksService])

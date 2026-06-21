@@ -11,11 +11,15 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AssignTaskDto = void 0;
 const class_validator_1 = require("class-validator");
+const swagger_1 = require("@nestjs/swagger");
 class AssignTaskDto {
     assignedToId;
 }
 exports.AssignTaskDto = AssignTaskDto;
 __decorate([
+    (0, swagger_1.ApiProperty)({
+        description: 'assign task to user',
+    }),
     (0, class_validator_1.IsMongoId)({ message: 'Assigned user id must be a valid MongoDB id' }),
     __metadata("design:type", String)
 ], AssignTaskDto.prototype, "assignedToId", void 0);

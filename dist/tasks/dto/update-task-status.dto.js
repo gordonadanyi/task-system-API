@@ -12,11 +12,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UpdateTaskStatusDto = void 0;
 const class_validator_1 = require("class-validator");
 const task_entity_1 = require("../entities/task.entity");
+const swagger_1 = require("@nestjs/swagger");
 class UpdateTaskStatusDto {
     status;
 }
 exports.UpdateTaskStatusDto = UpdateTaskStatusDto;
 __decorate([
+    (0, swagger_1.ApiProperty)({
+        description: 'Update task status',
+        example: 'in progress, pending, completed',
+    }),
     (0, class_validator_1.IsEnum)(task_entity_1.TaskStatus),
     __metadata("design:type", String)
 ], UpdateTaskStatusDto.prototype, "status", void 0);

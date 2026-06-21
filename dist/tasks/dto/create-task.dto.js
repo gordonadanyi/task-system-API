@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateTaskDto = void 0;
 const class_validator_1 = require("class-validator");
 const task_entity_1 = require("../entities/task.entity");
+const swagger_1 = require("@nestjs/swagger");
 class CreateTaskDto {
     title;
     description;
@@ -20,21 +21,37 @@ class CreateTaskDto {
 }
 exports.CreateTaskDto = CreateTaskDto;
 __decorate([
+    (0, swagger_1.ApiProperty)({
+        description: 'Tite of task',
+        example: 'New task',
+    }),
     (0, class_validator_1.IsNotEmpty)({ message: 'Title is required' }),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], CreateTaskDto.prototype, "title", void 0);
 __decorate([
+    (0, swagger_1.ApiProperty)({
+        description: 'Task description',
+        example: 'SQL documentation',
+    }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], CreateTaskDto.prototype, "description", void 0);
 __decorate([
+    (0, swagger_1.ApiProperty)({
+        description: 'update task status',
+        example: 'in progress, pending , completed',
+    }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsEnum)(task_entity_1.TaskStatus),
     __metadata("design:type", String)
 ], CreateTaskDto.prototype, "status", void 0);
 __decorate([
+    (0, swagger_1.ApiProperty)({
+        description: 'assign task to user',
+        example: 'userid',
+    }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsMongoId)({ message: 'Assigned user id must be a valid MongoDB id' }),
     __metadata("design:type", String)

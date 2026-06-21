@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateUserDto = void 0;
 const class_validator_1 = require("class-validator");
 const user_schema_1 = require("../schemas/user.schema");
+const swagger_1 = require("@nestjs/swagger");
 class CreateUserDto {
     userName;
     email;
@@ -20,23 +21,39 @@ class CreateUserDto {
 }
 exports.CreateUserDto = CreateUserDto;
 __decorate([
+    (0, swagger_1.ApiProperty)({
+        description: 'Username of user',
+        example: 'john doe',
+    }),
     (0, class_validator_1.IsNotEmpty)({ message: 'Username is required' }),
     (0, class_validator_1.MinLength)(4, { message: 'Username must be at least 4 characters long' }),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], CreateUserDto.prototype, "userName", void 0);
 __decorate([
+    (0, swagger_1.ApiProperty)({
+        description: 'email of user',
+        example: 'johndoe@test.com',
+    }),
     (0, class_validator_1.IsNotEmpty)({ message: 'Email is required' }),
     (0, class_validator_1.IsEmail)({}, { message: 'Invalid email format' }),
     __metadata("design:type", String)
 ], CreateUserDto.prototype, "email", void 0);
 __decorate([
+    (0, swagger_1.ApiProperty)({
+        description: 'password of user',
+        example: '12345678',
+    }),
     (0, class_validator_1.IsNotEmpty)({ message: 'Password is required' }),
     (0, class_validator_1.MinLength)(6, { message: 'Password must be at least 6 characters long' }),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], CreateUserDto.prototype, "password", void 0);
 __decorate([
+    (0, swagger_1.ApiProperty)({
+        description: 'role of user',
+        example: 'admin or user',
+    }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsArray)(),
     (0, class_validator_1.IsEnum)(user_schema_1.UserRole, { each: true }),
