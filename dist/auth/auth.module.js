@@ -14,12 +14,17 @@ const users_module_1 = require("../users/users.module");
 const auth_controller_1 = require("./auth.controller");
 const auth_service_1 = require("./auth.service");
 const jwt_strategy_1 = require("./jwt.strategy");
+const mongoose_1 = require("@nestjs/mongoose");
+const refresh_token_schema_1 = require("../users/schemas/refresh-token.schema");
 let AuthModule = class AuthModule {
 };
 exports.AuthModule = AuthModule;
 exports.AuthModule = AuthModule = __decorate([
     (0, common_1.Module)({
         imports: [
+            mongoose_1.MongooseModule.forFeature([
+                { name: refresh_token_schema_1.RefreshToken.name, schema: refresh_token_schema_1.RefreshTokenSchema },
+            ]),
             users_module_1.UsersModule,
             passport_1.PassportModule,
             jwt_1.JwtModule.register({

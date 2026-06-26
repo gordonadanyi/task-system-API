@@ -5,6 +5,7 @@ import { Model } from 'mongoose';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User, UserDocument, UserRole } from './schemas/user.schema';
 
+
 @Injectable()
 export class UsersService {
   constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
@@ -21,7 +22,7 @@ export class UsersService {
       userName: createUserDto.userName,
       email: createUserDto.email,
       passwordHash,
-      roles: createUserDto.roles?.length ? createUserDto.roles : [UserRole.User],
+      roles: createUserDto.roles,
     });
 
     return this.toPublicUser(createdUser);

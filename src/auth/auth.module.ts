@@ -5,9 +5,17 @@ import { UsersModule } from '../users/users.module';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { JwtStrategy } from './jwt.strategy';
+import { MongooseModule } from '@nestjs/mongoose';
+import {
+  RefreshToken,
+  RefreshTokenSchema,
+} from 'src/users/schemas/refresh-token.schema';
 
 @Module({
   imports: [
+    MongooseModule.forFeature([
+      { name: RefreshToken.name, schema: RefreshTokenSchema },
+    ]),
     UsersModule,
     PassportModule,
     JwtModule.register({

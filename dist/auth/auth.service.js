@@ -41,16 +41,25 @@ var __importStar = (this && this.__importStar) || (function () {
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthService = void 0;
 const common_1 = require("@nestjs/common");
 const bcrypt = __importStar(require("bcrypt"));
 const jwt_1 = require("@nestjs/jwt");
 const users_service_1 = require("../users/users.service");
+const uuid_1 = require("uuid");
+const mongoose_1 = require("@nestjs/mongoose");
+const mongoose_2 = require("mongoose");
+const refresh_token_schema_1 = require("../users/schemas/refresh-token.schema");
 let AuthService = class AuthService {
+    refreshTokenModel;
     usersService;
     jwtService;
-    constructor(usersService, jwtService) {
+    constructor(refreshTokenModel, usersService, jwtService) {
+        this.refreshTokenModel = refreshTokenModel;
         this.usersService = usersService;
         this.jwtService = jwtService;
     }
@@ -65,10 +74,6 @@ let AuthService = class AuthService {
             user,
         };
     }
-    generateToken(user) {
-        const payload = { sub: user._id, email: user.email, roles: user.roles };
-        return this.jwtService.sign(payload);
-    }
     async login(email, password) {
         const user = await this.usersService.findByEmail(email);
         if (!user) {
@@ -78,17 +83,51 @@ let AuthService = class AuthService {
         if (!isMatch) {
             throw new common_1.UnauthorizedException('Invalid credentials');
         }
+        const tokens = await this.generateToken(user);
         return {
             message: 'Login successful',
-            accessToken: this.generateToken(user),
+            ...tokens,
             user: this.usersService.toPublicUser(user),
         };
+    }
+    async generateToken(user) {
+        const payload = { sub: user._id, email: user.email, roles: user.roles };
+        const accessToken = this.jwtService.sign(payload);
+        const refreshToken = (0, uuid_1.v4)();
+        await this.storeRefreshToken(refreshToken, user._id.toString());
+        return {
+            accessToken,
+            refreshToken,
+        };
+    }
+    async storeRefreshToken(token, userId) {
+        const expiryDate = new Date();
+        expiryDate.setDate(expiryDate.getDate() + 3);
+        await this.refreshTokenModel.updateOne({ token, userId }, { $set: { expiryDate } }, {
+            upsert: true,
+        });
+    }
+    async refreshTokens(refreshToken) {
+        const token = await this.refreshTokenModel.findOne({
+            token: refreshToken,
+            expiryDate: { $gte: new Date() },
+        });
+        if (!token) {
+            throw new common_1.UnauthorizedException('refresh token is invalid');
+        }
+        const user = await this.usersService.findById(token.userId.toString());
+        if (!user) {
+            throw new common_1.UnauthorizedException('User not found');
+        }
+        return this.generateToken(user);
     }
 };
 exports.AuthService = AuthService;
 exports.AuthService = AuthService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [users_service_1.UsersService,
+    __param(0, (0, mongoose_1.InjectModel)(refresh_token_schema_1.RefreshToken.name)),
+    __metadata("design:paramtypes", [mongoose_2.Model,
+        users_service_1.UsersService,
         jwt_1.JwtService])
 ], AuthService);
 //# sourceMappingURL=auth.service.js.map

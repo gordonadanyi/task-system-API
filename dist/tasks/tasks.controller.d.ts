@@ -6,8 +6,8 @@ export declare class TasksController {
     private readonly tasksService;
     constructor(tasksService: TasksService);
     create(createTaskDto: CreateTaskDto, request: any): Promise<import("./entities/task.entity").Task>;
-    getAll(): Promise<import("./entities/task.entity").Task[]>;
-    getById(id: string): Promise<import("./entities/task.entity").Task>;
+    getAll(): Promise<{}>;
+    getById(id: string): Promise<{}>;
     update(id: string, updateTaskDto: Partial<CreateTaskDto>): Promise<import("./entities/task.entity").Task>;
     updateStatus(id: string, updateTaskStatusDto: UpdateTaskStatusDto, req: any): Promise<import("./entities/task.entity").Task>;
     delete(id: string): Promise<{

@@ -14,7 +14,7 @@ const typeorm_1 = require("typeorm");
 var TaskStatus;
 (function (TaskStatus) {
     TaskStatus["Pending"] = "pending";
-    TaskStatus["InProgress"] = "in_progress";
+    TaskStatus["InProgress"] = "inprogress";
     TaskStatus["Completed"] = "completed";
 })(TaskStatus || (exports.TaskStatus = TaskStatus = {}));
 let Task = class Task {

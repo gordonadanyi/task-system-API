@@ -8,7 +8,7 @@ import {
 
 export enum TaskStatus {
   Pending = 'pending',
-  InProgress = 'in_progress',
+  InProgress = 'inprogress',
   Completed = 'completed',
 }
 

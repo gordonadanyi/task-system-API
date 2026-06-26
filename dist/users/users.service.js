@@ -66,7 +66,7 @@ let UsersService = class UsersService {
             userName: createUserDto.userName,
             email: createUserDto.email,
             passwordHash,
-            roles: createUserDto.roles?.length ? createUserDto.roles : [user_schema_1.UserRole.User],
+            roles: createUserDto.roles,
         });
         return this.toPublicUser(createdUser);
     }
