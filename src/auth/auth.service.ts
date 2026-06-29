@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { CreateUserDto } from '../users/dto/create-user.dto';
@@ -7,7 +11,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { UserDocument } from 'src/users/schemas/user.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { RefreshTokenSchema, RefreshToken } from 'src/users/schemas/refresh-token.schema';
+import { RefreshToken } from 'src/users/schemas/refresh-token.schema';
 
 @Injectable()
 export class AuthService {
@@ -19,7 +23,9 @@ export class AuthService {
   ) {}
 
   async register(createUserDto: CreateUserDto) {
-    const existingUser = await this.usersService.findByEmail(createUserDto.email);
+    const existingUser = await this.usersService.findByEmail(
+      createUserDto.email,
+    );
 
     if (existingUser) {
       throw new BadRequestException('Email already in use');
@@ -48,11 +54,11 @@ export class AuthService {
 
     const tokens = await this.generateToken(user);
 
-return {
-    message: 'Login successful',
-    ...tokens,
-    user: this.usersService.toPublicUser(user),
-};
+    return {
+      message: 'Login successful',
+      ...tokens,
+      user: this.usersService.toPublicUser(user),
+    };
   }
 
   async generateToken(user: UserDocument) {
@@ -62,26 +68,26 @@ return {
     await this.storeRefreshToken(refreshToken, user._id.toString());
 
     return {
-    accessToken,
-    refreshToken,
-  };
-}
+      accessToken,
+      refreshToken,
+    };
+  }
 
   async storeRefreshToken(token: string, userId: string) {
-  //calculate expiry date 3 days from now
-  const expiryDate = new Date();
+    //calculate expiry date 3 days from now
+    const expiryDate = new Date();
     expiryDate.setDate(expiryDate.getDate() + 3);
 
     await this.refreshTokenModel.updateOne(
       { token, userId },
       { $set: { expiryDate } },
-  {
-    upsert: true,
+      {
+        upsert: true,
       },
     );
   }
 
-  async refreshTokens(refreshToken: string){
+  async refreshTokens(refreshToken: string) {
     const token = await this.refreshTokenModel.findOne({
       token: refreshToken,
       expiryDate: { $gte: new Date() },
@@ -92,10 +98,10 @@ return {
     }
     const user = await this.usersService.findById(token.userId.toString());
 
-  if (!user) {
-    throw new UnauthorizedException('User not found');
-  }
-  
+    if (!user) {
+      throw new UnauthorizedException('User not found');
+    }
+
     return this.generateToken(user);
   }
 }

@@ -1,10 +1,13 @@
-import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import * as bcrypt from 'bcrypt';
 import { Model } from 'mongoose';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User, UserDocument, UserRole } from './schemas/user.schema';
-
 
 @Injectable()
 export class UsersService {
@@ -28,12 +31,10 @@ export class UsersService {
     return this.toPublicUser(createdUser);
   }
 
-
   async getAll() {
     const users = await this.userModel.find().exec();
     return users.map((user) => this.toPublicUser(user));
   }
-
 
   async findByEmail(email: string) {
     return this.userModel.findOne({ email }).exec();
